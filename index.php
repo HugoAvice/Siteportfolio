@@ -33,7 +33,8 @@
     </nav>
     <main>
 <?php
-//require_once("bibli/yaml/yaml.php");
+
+require_once('vendor/autoload.php');
 include("php/accueil.php");
 include("php/apropos.php");
 include("php/competences.php");              
@@ -44,33 +45,24 @@ include("php/formation.php");
 </main>
     <footer>
       <?php include("php/contact.php"); ?>
-      <form method="post" action="php/envoi.php">
-      <label for="expediteur">Expéditeur:</label>
-      <input type="email" name="expediteur" required><br>
-      <label for="sujet">Sujet:</label>
-      <input type="text" name="sujet" required><br>
+      <form method="post">
+      <br>
+      <label for="nom">Nom:</label>
+      <input type="text" id="nom" name="nom" required>
+      <br />
+      <label for="prenom">Prénom:</label>
+      <input type="text" id="prenom" name="prenom" required>
+      <br />
       <label for="message">Message:</label>
-      <input type="text" name="message" required><br>
-       
-    <!--
-      <div id="moncaptchat" class="g-recaptcha" data-sitekey="6LfgpykpAAAAAEJrCgPc7LETdvSkxCu9M1_0Cu3V"></div>
+        <textarea id="message" name="message" required></textarea>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
       <br />
-      <span id="recaptcha-error" style="color:red;">
-          <?php //echo isset($recaptchaError) ? $recaptchaError : ''; ?>
-      </span>
-      <br />
+      <form action="?" method="POST">
+      <div class="g-recaptcha" data-sitekey="6LfgpykpAAAAAEJrCgPc7LETdvSkxCu9M1_0Cu3V"></div>
+      <br/>
       <input type="submit" value="Envoyer" class="custom-button">
-      <input type="reset" value="Reset" class="custom-button">
--->
-<div class="g-recaptcha" data-sitekey="6LfgpykpAAAAAEJrCgPc7LETdvSkxCu9M1_0Cu3V"></div>
-<?php
-    if($_GET["captcha"]==0){
-        echo "<p>Veuillez cochez la case</p>";
-    }
-?>
-<input type="submit" value="Envoyer" class="custom-button">
     </form>
-<script src='https://www.google.com/recaptcha/api.js'></script>
     </footer>
 </body>
 </html>
