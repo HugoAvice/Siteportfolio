@@ -33,7 +33,7 @@
     </nav>
     <main>
 <?php
-require_once("bibli/yaml/yaml.php");
+//require_once("bibli/yaml/yaml.php");
 include("php/accueil.php");
 include("php/apropos.php");
 include("php/competences.php");              
