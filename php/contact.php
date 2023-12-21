@@ -1,46 +1,53 @@
 <section id="contact">
     <h1>Contactez Moi :</h1>
     <br>
-    <?php
-        $data=yaml_parse_file('yaml/contact.yml');
-        echo "<p>".$data["contact"]."</p>";
-    ?>
-</section>
 <?php
-$recaptchaValid = false;
-$recaptchaError = '';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
+// Include PHPMailer autoload file
+require_once './vendor/autoload.php';
+
+// Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $destinataire = "hugoavice.contact@gmail.com";
-    $sujet = $_POST["sujet"];
-    $message = $_POST["message"];
-    $expediteur = $_POST["expediteur"]; 
-    $recaptchaSecretKey = "6LfgpykpAAAAAAZbLq2u6k-tWyPF45_WAm5k4v8N";
-    $recaptchaResponse = $_POST["g-recaptcha-response"];
+    // Get form data
+    $nom = $_POST['nom'];
+    $prenom = $_POST['prenom'];
+    $message = $_POST['message'];
+    $email = $_POST['email'];
 
-    $recaptchaUrl = "https://www.google.com/recaptcha/api/siteverify";
-    $recaptchaData = [
-        'secret' => $recaptchaSecretKey,
-        'response' => $recaptchaResponse,
-        'remoteip' => $_SERVER['REMOTE_ADDR'],
-    ];
+    // PHPMailer initialization
+    $mail = new PHPMailer(true);
 
-    $recaptchaOptions = [
-        'http' => [
-            'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-            'method' => 'POST',
-            'content' => http_build_query($recaptchaData),
-        ],
-    ];
+    try {
+        // Server settings
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Host = 'smtp.gmail.com';
+        $mail->Username = 'hugoavice.contact@gmail.com';
+        $mail->Password = 'lxnq nunw jfpa foad';
+        $mail->Port = 465;
+        $mail->SMTPSecure = 'ssl';
 
-    $recaptchaContext = stream_context_create($recaptchaOptions);
-    $recaptchaResult = file_get_contents($recaptchaUrl, false, $recaptchaContext);
-    $recaptchaData = json_decode($recaptchaResult, true);
+        // Sender and recipient settings
+        $mail->setFrom('hugoavice.contact@gmail.com', 'Hugo Avice');
+        $mail->addAddress('hugoavice.contact@gmail.com', 'Hugo Avice');
 
-    if (!$recaptchaData['success']) {
-        $recaptchaError = "La reCAPTCHA n'a pas été validée. Veuillez cocher la case reCAPTCHA avant d'envoyer le formulaire.";
-    } else {
-        $recaptchaValid = true;
+        // Content
+        $mail->isHTML(true);
+        $mail->Subject = 'Formulaire reçus';
+        $mail->Body = "First Name: $nom<br>Last Name: $prenom<br>message: $message<br>email: $email";
+
+        if (!$mail->send()) {
+            echo 'Email not sent an error was encountered: ' . $mail->ErrorInfo;
+        } else {
+            echo 'Le message a été envoyé avec succès.';
+        }
+
+        $mail->smtpClose();
+    } catch (Exception $e) {
+        echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
     }
 }
 ?>

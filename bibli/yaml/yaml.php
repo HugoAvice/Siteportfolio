@@ -4,7 +4,6 @@
 https://symfony.com/doc/current/components/yaml.html
 ******************************************************/
 
-require_once('vendor/autoload.php');
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Exception\ParseException;
 
